@@ -28,7 +28,7 @@ func (f Flag) Write(l Level) {
 
 	if flags&FlagWithCaller == FlagWithCaller {
 		// Produce caller
-		caller(2)
+		caller(3)
 		write(space)
 	}
 }

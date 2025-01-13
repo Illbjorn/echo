@@ -25,9 +25,24 @@ const (
 	FlagWithLevel Flag = 1 << iota
 	FlagWithCaller
 	FlagWithPrefix
+	FlagWithTier
 )
 
+var pc = make([]uintptr, 100, 100)
+
+func stackDepth() int {
+	var res = runtime.Callers(9, pc)
+	pc = pc[0:]
+	return res
+}
+
 func (f Flag) Write(l Level) {
+	if flags&FlagWithTier == FlagWithTier {
+		for range stackDepth() {
+			write(space)
+		}
+	}
+
 	if flags&FlagWithPrefix == FlagWithPrefix {
 		// Produce prefix
 		write([]byte(prefix))

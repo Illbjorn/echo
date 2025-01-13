@@ -28,7 +28,7 @@ const (
 	FlagWithTier
 )
 
-var pc = make([]uintptr, 100, 100)
+var pc = make([]uintptr, 100)
 
 func stackDepth() int {
 	var res = runtime.Callers(9, pc)

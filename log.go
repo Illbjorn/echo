@@ -18,12 +18,9 @@ func log(l Level, m string) {
 		return
 	}
 
-	if flags > 0 {
-		flags.Write(l)
-	}
-
-	write([]byte(m))
-	write(newline)
+	var out = format([]byte(m), l, flags)
+	out = append(out, bNewline)
+	write(out)
 
 	if l == LevelFatal {
 		os.Exit(1)

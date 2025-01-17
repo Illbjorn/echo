@@ -40,3 +40,20 @@ func (l Level) Bytes() []byte {
 		return nil
 	}
 }
+
+func (l Level) Color() Color {
+	switch l {
+	case LevelDebug:
+		return BLUE
+	case LevelInfo:
+		return GREEN
+	case LevelWarn:
+		return YELLOW
+	case LevelError:
+		return RED
+	case LevelFatal:
+		return RED
+	default:
+		return WHITE
+	}
+}

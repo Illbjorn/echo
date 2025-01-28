@@ -2,7 +2,6 @@ package echo
 
 import (
 	"os"
-	"syscall"
 )
 
-var wr syscall.Handle = syscall.Handle(os.Stdout.Fd())
+var wr = os.Stdout

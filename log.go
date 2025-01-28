@@ -3,34 +3,36 @@ package echo
 import (
 	"fmt"
 	"os"
-	"syscall"
 )
 
-func write(v []byte) {
-	_, _ = syscall.Write(
-		wr,
-		v,
-	)
+func write(v []byte) error {
+  var _, err = wr.Write(v)
+  return err
 }
 
-func log(l Level, m string) {
+func log(l Level, m string) error {
 	if l < level {
-		return
+		return nil
 	}
 
 	var out = format([]byte(m), l, flags)
 	out = append(out, bNewline)
-	write(out)
+	var err error
+  if err = write(out); err != nil {
+    return err
+  }
 
 	if l == LevelFatal {
 		os.Exit(1)
 	}
+
+  return nil
 }
 
-func logf(l Level, m string, vs ...any) {
+func logf(l Level, m string, vs ...any) error {
 	if l < level {
-		return
+		return nil
 	}
 
-	log(l, fmt.Sprintf(m, vs...))
+	return log(l, fmt.Sprintf(m, vs...))
 }

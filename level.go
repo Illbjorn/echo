@@ -1,12 +1,21 @@
 package echo
 
-var level Level
+import "io"
 
-func SetLevel(l Level) {
+var level Level = LevelWarn
+
+func SetLevel(l Level) Level {
+	// Not allowed to set above Fatal!
+	if l >= LevelFatal {
+		return level
+	}
+
+	current := level
 	level = l
+	return current
 }
 
-type Level uint8
+type Level = uint8
 
 const (
 	LevelDebug Level = 1 + iota
@@ -17,43 +26,64 @@ const (
 )
 
 var (
-	prefixDebug = []byte("DBG")
-	prefixWarn  = []byte("WRN")
-	prefixInfo  = []byte("INF")
-	prefixError = []byte("ERR")
-	prefixFatal = []byte("FTL")
+	lDebug = []byte("DBG")
+	lWarn  = []byte("WRN")
+	lInfo  = []byte("INF")
+	lError = []byte("ERR")
+	lFatal = []byte("FTL")
 )
 
-func (l Level) Bytes() []byte {
-	switch l {
-	case LevelDebug:
-		return prefixDebug
-	case LevelWarn:
-		return prefixWarn
-	case LevelInfo:
-		return prefixInfo
-	case LevelError:
-		return prefixError
-	case LevelFatal:
-		return prefixFatal
-	default:
-		return nil
+func writeLevel(w io.Writer, f Flags, l Level) (n int, err error) {
+	if !withLevel(f) {
+		return 0, nil
 	}
-}
 
-func (l Level) Color() Color {
+	fwrite := func(nn int, e error) bool {
+		n += nn
+		if e != nil {
+			err = e
+			return true
+		}
+		return false
+	}
+
+	var color []byte
+	var level []byte
 	switch l {
 	case LevelDebug:
-		return BLUE
-	case LevelInfo:
-		return GREEN
+		color = colorGray
+		level = lDebug
 	case LevelWarn:
-		return YELLOW
+		color = colorYellow
+		level = lWarn
+	case LevelInfo:
+		color = colorGreen
+		level = lInfo
 	case LevelError:
-		return RED
+		color = colorRed
+		level = lError
 	case LevelFatal:
-		return RED
+		color = colorRed
+		level = lFatal
 	default:
-		return WHITE
+		panic("impossible")
 	}
+
+	if withColor(f) && fwrite(w.Write(color)) {
+		return
+	}
+
+	if fwrite(w.Write(level)) {
+		return
+	}
+
+	if withColor(f) && fwrite(w.Write(colorReset)) {
+		return
+	}
+
+	if fwrite(w.Write(space)) {
+		return
+	}
+
+	return
 }

@@ -15,11 +15,11 @@
   All inputs are injected into the environment by Task (see `taskfile.yml`) at
   the repository root.
 
-  ver_path    : REQUIRED
+  version_path : REQUIRED
     The path to the `VERSION` file, in which the version string should be
     updated.
 
-  segment : REQUIRED
+  segment  : REQUIRED
     The version segment to be incremented. May be one of: 'major', 'minor' or
     'patch'.
 
@@ -28,17 +28,17 @@
 ################################################################################
 # Validate Inputs
 
-# 'ver_path'
+# 'version_path'
 # Must be provided
-if [[ -z "${ver_path}" ]]; then
-  echo "ERROR: Required input ['ver_path'] is not set."
+if [[ -z "${version_path}" ]]; then
+  echo "ERROR: Required input ['version_path'] is not set."
   exit 1
 fi
 
-# 'ver_path'
+# 'version_path'
 # Verify the provided VERSION file path exists
-if [[ ! -f "${ver_path}" ]]; then
-  echo "ERROR: Provided VERSION file path ['${ver_path}'] does not exist."
+if [[ ! -f "${version_path}" ]]; then
+  echo "ERROR: Provided VERSION file path ['${version_path}'] does not exist."
   # Provide an additional note in CICD
   if [[ -n "${GITHUB_OUTPUT}" ]]; then
     echo "       Did you run actions/checkout first?"
@@ -65,7 +65,7 @@ fi
 # Version Bump
 
 # Read the VERSION file
-ver="$(cat "${ver_path}")"
+ver="$(cat "${version_path}")"
 
 # Recognize the major, minor and patch segments.
 major="$(echo "${ver}" | grep -Po '^\K[0-9]+')"
@@ -96,4 +96,4 @@ esac
 new_ver="${major}.${minor}.${patch}"
 
 echo "Incrementing version ['${ver}']=>['${new_ver}']."
-echo "${new_ver}" > "${ver_path}"
+echo "${new_ver}" > "${version_path}"

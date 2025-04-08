@@ -55,6 +55,6 @@ func writeDouble(w io.Writer, v string) (n int, err error) {
 
 func writeString(w io.Writer, v string) (int, error) {
 	sdata := unsafe.StringData(v)
-	slice := unsafe.Slice(sdata, len(v))
-	return w.Write(slice)
+	return w.Write(unsafe.Slice(sdata, len(v)))
+}
 }

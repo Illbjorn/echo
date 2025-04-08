@@ -82,24 +82,17 @@ func log(f Flags, l Level, msg string) (n int, err error) {
 		return
 	}
 
-	fwrite := func(nn int, e error) bool {
-		n += nn
-		if e != nil {
-			err = e
-			return true
-		}
-		return false
-	}
+	acc := writeAccumulate(&n, &err)
 
-	if fwrite(writeFlagOpts(writer, f, l)) {
+	if acc(writeFlagOpts(writer, f, l)) {
 		return
 	}
 
-	if fwrite(writeString(writer, msg)) {
+	if acc(writeString(writer, msg)) {
 		return
 	}
 
-	if fwrite(writer.Write(newline)) {
+	if acc(writer.Write(newline)) {
 		return
 	}
 

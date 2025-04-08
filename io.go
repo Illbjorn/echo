@@ -31,22 +31,15 @@ var (
 )
 
 func writeDouble(w io.Writer, v string) (n int, err error) {
-	fwrite := func(nn int, e error) bool {
-		n += nn
-		if e != nil {
-			err = e
-			return true
-		}
-		return false
-	}
+	acc := writeAccumulate(&n, &err)
 
 	if len(v) == 1 {
-		if fwrite(w.Write(zero)) {
+		if acc(w.Write(zero)) {
 			return
 		}
 	}
 
-	if fwrite(writeString(w, v)) {
+	if acc(writeString(w, v)) {
 		return
 	}
 
@@ -57,4 +50,14 @@ func writeString(w io.Writer, v string) (int, error) {
 	sdata := unsafe.StringData(v)
 	return w.Write(unsafe.Slice(sdata, len(v)))
 }
+
+func writeAccumulate(n *int, err *error) func(nn int, e error) bool {
+	return func(nn int, e error) bool {
+		*n += nn
+		if e != nil {
+			*err = e
+			return true
+		}
+		return false
+	}
 }

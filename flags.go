@@ -40,37 +40,30 @@ func withDate(f Flags) bool       { return bitSet(WITH_DATE, f) }
 func withColor(f Flags) bool      { return bitSet(WITH_COLOR, f) }
 
 func writeFlagOpts(w io.Writer, f Flags, l Level) (n int, err error) {
-	fwrite := func(nn int, e error) bool {
-		n += nn
-		if e != nil {
-			err = e
-			return true
-		}
-		return false
-	}
+	acc := writeAccumulate(&n, &err)
 
-	// ////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////
 	// Callers
 
-	if fwrite(writeCallers(w, f)) {
+	if acc(writeCallers(w, f)) {
 		return
 	}
 
-	// ////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////
 	// Level
 
-	if fwrite(writeLevel(w, f, l)) {
+	if acc(writeLevel(w, f, l)) {
 		return
 	}
 
-	// ////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////
 	// Date
 
-	if fwrite(writeTimestamp(w, f, l)) {
+	if acc(writeTimestamp(w, f, l)) {
 		return
 	}
 
-	// ////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////
 	// Call Stack
 	// TODO
 
@@ -84,14 +77,7 @@ func writeTimestamp(w io.Writer, f Flags, _ Level) (n int, err error) {
 		return
 	}
 
-	acc := func(nn int, e error) bool {
-		n = n + nn
-		if e != nil {
-			err = e
-			return true
-		}
-		return false
-	}
+	acc := writeAccumulate(&n, &err)
 
 	now := time.Now()
 	if withDate {

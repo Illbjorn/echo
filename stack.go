@@ -22,17 +22,10 @@ func writeCallers(w io.Writer, f Flags) (n int, err error) {
 		return
 	}
 
-	fwrite := func(nn int, e error) bool {
-		n += nn
-		if e != nil {
-			err = e
-			return true
-		}
-		return false
-	}
+	acc := writeAccumulate(&n, &err)
 
 	// [
-	if fwrite(w.Write(brackL)) {
+	if acc(w.Write(brackL)) {
 		return
 	}
 
@@ -43,7 +36,7 @@ func writeCallers(w io.Writer, f Flags) (n int, err error) {
 		if i >= 0 && i < len(file)-1 {
 			file = file[i+1:]
 		}
-		if fwrite(writeString(w, file)) {
+		if acc(writeString(w, file)) {
 			return
 		}
 	}
@@ -52,11 +45,11 @@ func writeCallers(w io.Writer, f Flags) (n int, err error) {
 	if withLine {
 		line := frames[0].Line
 		if withFile {
-			if fwrite(w.Write(colon)) {
+			if acc(w.Write(colon)) {
 				return
 			}
 		}
-		if fwrite(writeString(w, strconv.Itoa(line))) {
+		if acc(writeString(w, strconv.Itoa(line))) {
 			return
 		}
 	}
@@ -64,7 +57,7 @@ func writeCallers(w io.Writer, f Flags) (n int, err error) {
 	// FWithFunc
 	if withFunc {
 		if withFile {
-			if fwrite(w.Write(fatArrow)) {
+			if acc(w.Write(fatArrow)) {
 				return
 			}
 		}
@@ -74,17 +67,17 @@ func writeCallers(w io.Writer, f Flags) (n int, err error) {
 		if i >= 0 && i < len(fn)-1 {
 			fn = fn[i+1:]
 		}
-		if fwrite(writeString(w, fn)) {
+		if acc(writeString(w, fn)) {
 			return
 		}
 	}
 
 	// ]
-	if fwrite(w.Write(brackR)) {
+	if acc(w.Write(brackR)) {
 		return
 	}
 
-	if fwrite(w.Write(space)) {
+	if acc(w.Write(space)) {
 		return
 	}
 

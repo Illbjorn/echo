@@ -38,14 +38,7 @@ func writeLevel(w io.Writer, f Flags, l Level) (n int, err error) {
 		return 0, nil
 	}
 
-	fwrite := func(nn int, e error) bool {
-		n += nn
-		if e != nil {
-			err = e
-			return true
-		}
-		return false
-	}
+	acc := writeAccumulate(&n, &err)
 
 	var color []byte
 	var level []byte
@@ -69,19 +62,19 @@ func writeLevel(w io.Writer, f Flags, l Level) (n int, err error) {
 		panic("impossible")
 	}
 
-	if withColor(f) && fwrite(w.Write(color)) {
+	if withColor(f) && acc(w.Write(color)) {
 		return
 	}
 
-	if fwrite(w.Write(level)) {
+	if acc(w.Write(level)) {
 		return
 	}
 
-	if withColor(f) && fwrite(w.Write(colorReset)) {
+	if withColor(f) && acc(w.Write(colorReset)) {
 		return
 	}
 
-	if fwrite(w.Write(space)) {
+	if acc(w.Write(space)) {
 		return
 	}
 

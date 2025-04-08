@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
 )
 
 func TestCallers(t *testing.T) {
@@ -24,6 +24,6 @@ func testCallers(t *testing.T, b *bytes.Buffer, expectv string, fs ...Flags) {
 
 	SetFlags(fs...)
 	_, err := writeCallers(b, flags)
-	assert.NoError(t, err)
+	assert.NilError(t, err)
 	assert.Equal(t, expectv, b.String())
 }

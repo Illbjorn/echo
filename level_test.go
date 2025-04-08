@@ -3,7 +3,7 @@ package echo
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
 )
 
 func TestLevel(t *testing.T) {

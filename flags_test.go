@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
 )
 
 type logFn = func(v string) (int, error)
@@ -38,7 +38,7 @@ func expectFlags(t *testing.T, w testWriter, v, expectv string, fn logFn, fs ...
 	expectn := len(expectv)
 	SetFlags(fs...)
 	n, err := fn(v)
-	assert.NoError(t, err)
+	assert.NilError(t, err)
 	assert.Equal(t, expectn, n)
 	assert.Equal(t, expectv, w.String())
 }

@@ -1,10 +1,9 @@
 package echo
 
-func bitSet(i uint8, v uint8) bool {
-	shift := 8 - i
-	if shift < 0 {
+func bitSet(bitPosition uint8, value uint8) bool {
+	shift := 8 - bitPosition
+	if shift > 8 {
 		return false
 	}
-
-	return v>>shift&1 == 1
+	return value>>shift&1 == 1
 }

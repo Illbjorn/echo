@@ -11,11 +11,11 @@ func TestCallers(t *testing.T) {
 	b := setup(t)
 
 	const thisFunc = "[TestCallers] "
-	testCallers(t, b, thisFunc, WITH_CALLER_FUNC)
+	testCallers(t, b, thisFunc, WithCallerFunc)
 	const thisFile = "[stack_test.go] "
-	testCallers(t, b, thisFile, WITH_CALLER_FILE)
+	testCallers(t, b, thisFile, WithCallerFile)
 	const thisFuncThisLine = "[stack_test.go=>TestCallers] "
-	testCallers(t, b, thisFuncThisLine, WITH_CALLER_FUNC, WITH_CALLER_FILE)
+	testCallers(t, b, thisFuncThisLine, WithCallerFunc, WithCallerFile)
 }
 
 func testCallers(t *testing.T, b *bytes.Buffer, expectv string, fs ...Flags) {

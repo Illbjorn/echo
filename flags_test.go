@@ -18,11 +18,11 @@ func TestFlags(t *testing.T) {
 	nowDate := time.Now().Format("01-02-06")
 	nowTime := time.Now().Format("03:04:05")
 	expectTime := fmt.Sprintf("[%s] \n", nowTime)
-	expectFlags(t, b, "", expectTime, Info, WITH_TIME)
+	expectFlags(t, b, "", expectTime, Info, WithTime)
 	expectDate := fmt.Sprintf("[%s] \n", nowDate)
-	expectFlags(t, b, "", expectDate, Info, WITH_DATE)
+	expectFlags(t, b, "", expectDate, Info, WithDate)
 	expectDateTime := fmt.Sprintf("[%s][%s] \n", nowDate, nowTime)
-	expectFlags(t, b, "", expectDateTime, Info, WITH_TIME, WITH_DATE)
+	expectFlags(t, b, "", expectDateTime, Info, WithTime, WithDate)
 }
 
 type testWriter interface {

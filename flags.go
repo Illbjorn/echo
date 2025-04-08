@@ -20,24 +20,24 @@ func SetFlags(fs ...Flags) {
 const (
 	//                                  Bit
 	//                                  ---
-	WITH_CALLER_FUNC Flags = 1 + iota //  1
-	WITH_CALLER_FILE                  //  2
-	WITH_CALLER_LINE                  //  3
-	WITH_CALL_STACK                   //  4
-	WITH_LEVEL                        //  5
-	WITH_TIME                         //  6
-	WITH_DATE                         //  7
-	WITH_COLOR                        //  8
+	WithCallerFunc Flags = 1 + iota //  1
+	WithCallerFile                  //  2
+	WithCallerLine                  //  3
+	WithCallStack                   //  4
+	WithLevel                       //  5
+	WithTime                        //  6
+	WithDate                        //  7
+	WithColor                       //  8
 )
 
-func withCallerFunc(f Flags) bool { return bitSet(WITH_CALLER_FUNC, f) }
-func withCallerFile(f Flags) bool { return bitSet(WITH_CALLER_FILE, f) }
-func withCallerLine(f Flags) bool { return bitSet(WITH_CALLER_LINE, f) }
-func withCallStack(f Flags) bool  { return bitSet(WITH_CALL_STACK, f) } // TODO
-func withLevel(f Flags) bool      { return bitSet(WITH_LEVEL, f) }
-func withTime(f Flags) bool       { return bitSet(WITH_TIME, f) }
-func withDate(f Flags) bool       { return bitSet(WITH_DATE, f) }
-func withColor(f Flags) bool      { return bitSet(WITH_COLOR, f) }
+func withCallerFunc(f Flags) bool { return bitSet(WithCallerFunc, f) }
+func withCallerFile(f Flags) bool { return bitSet(WithCallerFile, f) }
+func withCallerLine(f Flags) bool { return bitSet(WithCallerLine, f) }
+func withCallStack(f Flags) bool  { return bitSet(WithCallStack, f) } // TODO
+func withLevel(f Flags) bool      { return bitSet(WithLevel, f) }
+func withTime(f Flags) bool       { return bitSet(WithTime, f) }
+func withDate(f Flags) bool       { return bitSet(WithDate, f) }
+func withColor(f Flags) bool      { return bitSet(WithColor, f) }
 
 func writeFlagOpts(w io.Writer, f Flags, l Level) (n int, err error) {
 	acc := writeAccumulate(&n, &err)

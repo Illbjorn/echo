@@ -40,7 +40,7 @@ func withDate(f Flags) bool       { return bitSet(WithDate, f) }
 func withColor(f Flags) bool      { return bitSet(WithColor, f) }
 
 func writeFlagOpts(w io.Writer, f Flags, l Level) (n int, err error) {
-	acc := writeAccumulate(&n, &err)
+	acc := writeAccumulator(&n, &err)
 
 	//////////////////////////////////////////////////////////////////////////////
 	// Callers
@@ -77,7 +77,7 @@ func writeTimestamp(w io.Writer, f Flags, _ Level) (n int, err error) {
 		return
 	}
 
-	acc := writeAccumulate(&n, &err)
+	acc := writeAccumulator(&n, &err)
 
 	now := time.Now()
 	if withDate {
@@ -110,10 +110,6 @@ func writeTimestamp(w io.Writer, f Flags, _ Level) (n int, err error) {
 
 		// 25
 		year := strconv.Itoa(now.Year())
-		if len(year) < 2 {
-			panic("impossible")
-			// return // impossible
-		}
 		if acc(writeString(w, year[2:])) {
 			return
 		}
@@ -133,7 +129,7 @@ func writeTimestamp(w io.Writer, f Flags, _ Level) (n int, err error) {
 		// 00
 		hours := now.Hour()
 		if hours > 12 {
-			hours = hours - 12
+			hours -= 12
 		}
 		hourStr := strconv.Itoa(hours)
 		if acc(writeDouble(w, hourStr)) {

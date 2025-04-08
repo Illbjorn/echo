@@ -22,7 +22,7 @@ func writeCallers(w io.Writer, f Flags) (n int, err error) {
 		return
 	}
 
-	acc := writeAccumulate(&n, &err)
+	acc := writeAccumulator(&n, &err)
 
 	// [
 	if acc(w.Write(brackL)) {

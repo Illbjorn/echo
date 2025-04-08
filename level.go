@@ -38,7 +38,7 @@ func writeLevel(w io.Writer, f Flags, l Level) (n int, err error) {
 		return 0, nil
 	}
 
-	acc := writeAccumulate(&n, &err)
+	acc := writeAccumulator(&n, &err)
 
 	var color []byte
 	var level []byte
@@ -46,18 +46,23 @@ func writeLevel(w io.Writer, f Flags, l Level) (n int, err error) {
 	case LevelDebug:
 		color = colorGray
 		level = lDebug
+
 	case LevelWarn:
 		color = colorYellow
 		level = lWarn
+
 	case LevelInfo:
 		color = colorGreen
 		level = lInfo
+
 	case LevelError:
 		color = colorRed
 		level = lError
+
 	case LevelFatal:
 		color = colorRed
 		level = lFatal
+
 	default:
 		panic("impossible")
 	}

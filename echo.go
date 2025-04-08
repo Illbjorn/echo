@@ -74,23 +74,17 @@ func Fatalf(v string, vs ...any) {
  *----------------------------------------------------------------------------*/
 
 func log(f Flags, l Level, msg string) (n int, err error) {
-	if writer == nil {
-		return
-	}
-
 	if l < level {
 		return
 	}
 
-	acc := writeAccumulate(&n, &err)
+	acc := writeAccumulator(&n, &err)
 
 	if acc(writeFlagOpts(writer, f, l)) {
 		return
 	}
 
-	if acc(writeString(writer, msg)) {
-		return
-	}
+	acc(writeString(writer, msg))
 
 	if acc(writer.Write(newline)) {
 		return
